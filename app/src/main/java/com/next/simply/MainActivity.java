@@ -1,9 +1,12 @@
 package com.next.simply;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.next.simply.ui.Contacts;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +15,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, Contacts.class);
+        startActivity(intent);
     }
 
     @Override
