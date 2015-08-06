@@ -4,6 +4,8 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,27 +14,35 @@ import android.widget.ListView;
 import android.provider.ContactsContract;
 
 import com.next.simply.R;
+import com.next.simply.adapters.ContactAdapter;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
-public class Contacts extends ListActivity {
+public class Contacts extends AppCompatActivity {
+    private static final String TAG = Contacts.class.getSimpleName();
+
     ArrayList<String> mListNumbers;
 
-    @Bind(android.R.id.list) ListView mListView;
+    @Bind(R.id.listView) ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
+        ButterKnife.bind(this);
 
         mListNumbers = this.getAllMobileNumbers(this);
-        Log.d(Contacts.class.getSimpleName(), mListNumbers.toString());
+        Log.d(TAG, mListNumbers.toString());
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListNumbers);
-        setListAdapter(adapter);
+        ContactAdapter adapter = new ContactAdapter(this, mListNumbers);
+
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListNumbers);
+
+        mListView.setAdapter(adapter);
     }
 
     @Override
