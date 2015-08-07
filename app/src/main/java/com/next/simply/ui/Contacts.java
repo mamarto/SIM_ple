@@ -1,20 +1,14 @@
 package com.next.simply.ui;
 
-import android.app.ListActivity;
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.provider.ContactsContract;
 
 import com.next.simply.R;
 import com.next.simply.adapters.ContactAdapter;
+import com.next.simply.model.Phonebook;
 
 import java.util.ArrayList;
 
@@ -25,7 +19,8 @@ import butterknife.ButterKnife;
 public class Contacts extends AppCompatActivity {
     private static final String TAG = Contacts.class.getSimpleName();
 
-    ArrayList<String> mListNumbers;
+    private ArrayList<String> mListNumbers;
+
 
     @Bind(R.id.listView) ListView mListView;
 
@@ -35,15 +30,16 @@ public class Contacts extends AppCompatActivity {
         setContentView(R.layout.activity_contacts);
         ButterKnife.bind(this);
 
-        mListNumbers = this.getAllMobileNumbers(this);
-        Log.d(TAG, mListNumbers.toString());
+        Phonebook phonebook = new Phonebook();
+        mListNumbers = phonebook.getAllMobileNumbers(this);
+
+        phonebook.sortArrayList(mListNumbers);
 
         ContactAdapter adapter = new ContactAdapter(this, mListNumbers);
-
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListNumbers);
-
         mListView.setAdapter(adapter);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,22 +56,12 @@ public class Contacts extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_show_contacts) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<String> getAllMobileNumbers(final Context context) {
-        final ArrayList<String> listNumbers = new ArrayList<String>();
-        final Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (cursor.moveToNext()) {
-            final int phone_id = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            final String phone = cursor.getString(phone_id);
-            listNumbers.add(phone);
-        }
 
-        return listNumbers;
-    }
 }
