@@ -7,21 +7,12 @@ import android.provider.ContactsContract;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 
 /**
  * Created by manfredi on 07/08/15.
  */
 public class Phonebook {
-
-    private ArrayList<String> mListNumbers;
-
-    public ArrayList<String> getListNumbers() {
-        return mListNumbers;
-    }
-
-    public void setListNumbers(ArrayList<String> listNumbers) {
-        mListNumbers = listNumbers;
-    }
 
     public void sortArrayList(ArrayList<String> arrayList) {
         Collections.sort(arrayList, new Comparator<String>() {
@@ -32,16 +23,19 @@ public class Phonebook {
         });
     }
 
-    public ArrayList<String> getAllMobileNumbers(final Context context) {
-        final ArrayList<String> listNumbers = new ArrayList<String>();
+    public LinkedHashMap<String, String> getAllMobileNumbers(final Context context) {
+        LinkedHashMap<String, String> listNumbers = new LinkedHashMap<String, String>();
         final Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (cursor.moveToNext()) {
             final int phone_id = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            final String phone = cursor.getString(phone_id);
-            listNumbers.add(phone);
+            final String contactName = cursor.getString(phone_id);
+
+            final int phone_number = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            final String contactNumber = cursor.getString(phone_number);
+
+            listNumbers.put(contactName, contactNumber);
         }
 
         return listNumbers;
     }
-
 }

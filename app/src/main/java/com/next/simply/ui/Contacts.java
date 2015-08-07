@@ -10,7 +10,7 @@ import com.next.simply.R;
 import com.next.simply.adapters.ContactAdapter;
 import com.next.simply.model.Phonebook;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -19,8 +19,7 @@ import butterknife.ButterKnife;
 public class Contacts extends AppCompatActivity {
     private static final String TAG = Contacts.class.getSimpleName();
 
-    private ArrayList<String> mListNumbers;
-
+    private LinkedHashMap<String, String> mListNumbers;
 
     @Bind(R.id.listView) ListView mListView;
 
@@ -32,8 +31,7 @@ public class Contacts extends AppCompatActivity {
 
         Phonebook phonebook = new Phonebook();
         mListNumbers = phonebook.getAllMobileNumbers(this);
-
-        phonebook.sortArrayList(mListNumbers);
+        //phonebook.sortArrayList(mListNumbers);
 
         ContactAdapter adapter = new ContactAdapter(this, mListNumbers);
         mListView.setAdapter(adapter);
