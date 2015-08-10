@@ -39,6 +39,10 @@ public class ContactAdapter extends BaseAdapter {
         return mListNumbers.get(mKeys[position]);
     }
 
+    public String getKey(int position) {
+        return mKeys[position];
+    }
+
     @Override
     public long getItemId(int position) {
         return 0;

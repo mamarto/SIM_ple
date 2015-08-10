@@ -30,6 +30,8 @@ import butterknife.ButterKnife;
 public class AddContactActivity extends AppCompatActivity {
     private Context mContext;
 
+    private android.support.v7.app.ActionBar mActionBar;
+
     private String mName;
     private String mTelephone;
 
@@ -44,8 +46,9 @@ public class AddContactActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_contact);
         ButterKnife.bind(this);
 
-        getSupportActionBar().setTitle(Html.fromHtml("<b>Add new contact</b>"));
-        
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle(Html.fromHtml("<b>Add new contact</b>"));
+
         mContext = getApplicationContext();
 
         mAddContact.setOnClickListener(new View.OnClickListener() {

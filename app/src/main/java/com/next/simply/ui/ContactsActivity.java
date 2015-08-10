@@ -24,8 +24,11 @@ import butterknife.OnClick;
 public class ContactsActivity extends AppCompatActivity {
     private static final String TAG = ContactsActivity.class.getSimpleName();
 
-    private Map<String, String> mListNumbers;
+    private Map<String, String> mContacts;
     private android.support.v7.app.ActionBar mActionBar;
+
+    private boolean mOrderByName;
+    private Bundle extras;
 
     @Bind(R.id.listView) ListView mListView;
 
@@ -39,14 +42,31 @@ public class ContactsActivity extends AppCompatActivity {
         mActionBar.setTitle(Html.fromHtml("<b>SIM PLY</b>"));
 
         Phonebook phonebook = new Phonebook();
-        mListNumbers = phonebook.getAllMobileNumbers(this);
 
-        ContactAdapter adapter = new ContactAdapter(this, mListNumbers);
+        extras = getIntent().getExtras();
+
+        if (extras != null) {
+            mOrderByName = extras.getBoolean("ORDER_BY");
+            if (mOrderByName) {
+                mContacts = phonebook.getAllMobileNumbersByName(this);
+            } else {
+                mContacts = phonebook.getAllMobileNumbersBySurname(this);
+            }
+        }
+        else {
+            mContacts = phonebook.getAllMobileNumbersByName(this);
+        }
+
+        final ContactAdapter adapter = new ContactAdapter(this, mContacts);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), EditContactActivity.class);
+                String item = adapter.getKey(position);
+                String number = adapter.getItem(position).toString();
+                intent.putExtra("CONTACT_NAME", item);
+                intent.putExtra("CONTACT_NUMBER", number);
                 startActivity(intent);
             }
         });

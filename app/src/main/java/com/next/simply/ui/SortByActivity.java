@@ -1,39 +1,45 @@
 package com.next.simply.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.next.simply.R;
 
-public class SortByActivity extends ActionBarActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class SortByActivity extends AppCompatActivity {
+
+    @Bind(R.id.radioGroup) RadioGroup mRadioGroup;
+    @Bind(R.id.nameButton) RadioButton mName;
+    @Bind(R.id.surnameButton) RadioButton mSurname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sort_by);
-    }
+        ButterKnife.bind(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sort_by, menu);
-        return true;
-    }
+        mName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+                intent.putExtra("ORDER_BY", true);
+                startActivity(intent);
+            }
+        });
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        mSurname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+                intent.putExtra("ORDER_BY", false);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -1,18 +1,43 @@
 package com.next.simply.ui;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.next.simply.R;
 
-public class EditContactActivity extends ActionBarActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class EditContactActivity extends AppCompatActivity {
+
+    @Bind (R.id.nameContactEditText) TextView mNameContact;
+    @Bind(R.id.numberNameContactEditText) TextView mNumberContact;
+
+    private String mName;
+    private String mNumber;
+
+    private android.support.v7.app.ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_contact);
+        ButterKnife.bind(this);
+
+        mActionBar = getSupportActionBar();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mName = extras.getString("CONTACT_NAME");
+            mNumber = extras.getString("CONTACT_NUMBER");
+            mActionBar.setTitle(Html.fromHtml("<b>" + mName + "</b>"));
+            mNameContact.setText(mName);
+            mNumberContact.setText(mNumber);
+        }
     }
 
     @Override
@@ -37,3 +62,4 @@ public class EditContactActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
