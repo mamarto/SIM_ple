@@ -12,18 +12,18 @@ import android.widget.TextView;
 
 import com.next.simply.R;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Created by manfredi on 06/08/15.
  */
 public class ContactAdapter extends BaseAdapter {
     private Context mContext;
-    private LinkedHashMap<String, String> mListNumbers;
+    private Map<String, String> mListNumbers;
     private String[] mKeys;
     private String number;
 
-    public ContactAdapter(Context context, LinkedHashMap<String, String> arrayList) {
+    public ContactAdapter(Context context, Map<String, String> arrayList) {
         mContext = context;
         mListNumbers = arrayList;
         mKeys = mListNumbers.keySet().toArray(new String[mListNumbers.size()]);
@@ -96,58 +96,6 @@ public class ContactAdapter extends BaseAdapter {
         ImageView messageButton;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -2,47 +2,26 @@ package com.next.simply.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.next.simply.R;
-import com.next.simply.adapters.ContactAdapter;
-import com.next.simply.model.Phonebook;
 
-import java.util.LinkedHashMap;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-
-public class Contacts extends AppCompatActivity {
-    private static final String TAG = Contacts.class.getSimpleName();
-
-    private LinkedHashMap<String, String> mListNumbers;
-
-    @Bind(R.id.listView) ListView mListView;
+public class AddContactActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_add_contact);
 
-        Phonebook phonebook = new Phonebook();
-        mListNumbers = phonebook.getAllMobileNumbers(this);
-        //phonebook.sortArrayList(mListNumbers);
-
-        ContactAdapter adapter = new ContactAdapter(this, mListNumbers);
-        mListView.setAdapter(adapter);
+        getSupportActionBar().setTitle(Html.fromHtml("<b>SIM PLY</b>"));
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_contacts, menu);
+        getMenuInflater().inflate(R.menu.menu_add_contact, menu);
         return true;
     }
 
@@ -54,12 +33,10 @@ public class Contacts extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_show_contacts) {
+        if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
 }

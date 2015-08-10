@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.next.simply.ui.Contacts">
+      tools:context="com.next.simply.ui.ContactsActivity">
     <item android:id="@+id/action_show_contacts"
           android:title="@string/action_show_contacts"
           android:orderInCategory="100"

@@ -19,8 +19,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.Contacts"
+            android:name=".ui.ContactsActivity"
             android:label="@string/title_activity_contacts" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+                <meta-data android:name="android.app.searchable"
+                           android:resource="@xml/searchable"/>
+        </activity>
+        <activity
+            android:name=".ui.AddContactActivity"
+            android:label="@string/title_activity_add_contact"
+            android:parentActivityName=".ui.ContactsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.ContactsActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ShowContactsActivity"
+            android:label="@string/title_activity_show_contacts"
+            android:parentActivityName=".ui.ContactsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.next.simply.ui.ContactsActivity" />
+        </activity>
+        <activity
+            android:name=".ui.SortByActivity"
+            android:label="@string/title_activity_sort_by"
+            android:parentActivityName=".ui.ContactsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.next.simply.ui.ContactsActivity" />
+        </activity>
+        <activity
+            android:name=".ui.ImportExportContactActivity"
+            android:label="@string/title_activity_import_export_contact"
+            android:parentActivityName=".ui.ContactsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.next.simply.ui.ContactsActivity" />
+        </activity>
+        <activity
+            android:name=".ui.EditContactActivity"
+            android:label="@string/title_activity_edit_contact"
+            android:parentActivityName=".ui.ContactsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.next.simply.ui.ContactsActivity" />
         </activity>
     </application>
 

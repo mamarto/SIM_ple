@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.next.simply.R;
-import com.next.simply.ui.Contacts;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -15,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, Contacts.class);
+        Intent intent = new Intent(this, ContactsActivity.class);
         startActivity(intent);
     }
 
