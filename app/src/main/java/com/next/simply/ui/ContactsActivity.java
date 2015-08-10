@@ -85,7 +85,7 @@ public class ContactsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick (R.id.addContact) public void startAddActivity() {
+    @OnClick(R.id.addContact) public void startAddActivity() {
         Intent intent = new Intent(this, AddContactActivity.class);
         startActivity(intent);
     }

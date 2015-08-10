@@ -3,6 +3,7 @@
     package="com.next.simply" >
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +30,7 @@
         </activity>
         <activity
             android:name=".ui.AddContactActivity"
-            android:label="@string/title_activity_add_contact"
+            android:label="Add contact"
             android:parentActivityName=".ui.ContactsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

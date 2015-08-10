@@ -15,4 +15,7 @@
     <string name="title_activity_import_export_contact">SIM PLY</string>
     <string name="title_activity_edit_contact">SIM PLY</string>
     <string name="search_hint">Find Contact</string>
+    <string name="add_contact_name">Name</string>
+    <string name="add_contact_surname">Surname</string>
+    <string name="add_contact_telephone">Telephone</string>
 </resources>
