@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.next.simply.R;
 
@@ -14,7 +13,6 @@ import butterknife.ButterKnife;
 
 public class SortByActivity extends AppCompatActivity {
 
-    @Bind(R.id.radioGroup) RadioGroup mRadioGroup;
     @Bind(R.id.nameButton) RadioButton mName;
     @Bind(R.id.surnameButton) RadioButton mSurname;
 

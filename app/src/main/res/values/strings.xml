@@ -20,4 +20,6 @@
     <string name="add_contact_telephone">Telephone</string>
     <string name="radio_button_first">Name</string>
     <string name="radio_button_second">Surname</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 </resources>
