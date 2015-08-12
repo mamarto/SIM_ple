@@ -1,6 +1,7 @@
 package com.next.simply.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -28,7 +29,6 @@ public class ContactsActivity extends AppCompatActivity {
     private android.support.v7.app.ActionBar mActionBar;
 
     private boolean mOrderByName;
-    private Bundle extras;
 
     @Bind(R.id.listView) ListView mListView;
 
@@ -43,19 +43,16 @@ public class ContactsActivity extends AppCompatActivity {
 
         Phonebook phonebook = new Phonebook();
 
-        extras = getIntent().getExtras();
+        SharedPreferences mPrefs = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE);
+        mOrderByName = mPrefs.getBoolean("NAME_SURNAME", true);
 
-        if (extras != null) {
-            mOrderByName = extras.getBoolean("ORDER_BY");
-            if (mOrderByName) {
-                mContacts = phonebook.getAllMobileNumbersByName(this);
-            } else {
-                mContacts = phonebook.getAllMobileNumbersBySurname(this);
-            }
-        }
-        else {
+        if (mOrderByName) {
             mContacts = phonebook.getAllMobileNumbersByName(this);
         }
+        else {
+            mContacts = phonebook.getAllMobileNumbersBySurname(this);
+        }
+
 
         final ContactAdapter adapter = new ContactAdapter(this, mContacts);
         mListView.setAdapter(adapter);

@@ -1,6 +1,7 @@
 package com.next.simply.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,11 +23,27 @@ public class SortByActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sort_by);
         ButterKnife.bind(this);
 
+        SharedPreferences mPrefs = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE);
+        boolean name = mPrefs.getBoolean("NAME_SURNAME", true);
+
+        if (name) {
+            mName.setChecked(true);
+        }
+        else {
+            mSurname.setChecked(true);
+        }
+
         mName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-                intent.putExtra("ORDER_BY", true);
+
+                SharedPreferences.Editor mEditor = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE).edit();
+                mEditor.putBoolean("NAME_SURNAME", true).apply();
+                mEditor.apply();
+
+                mSurname.setChecked(false);
+
                 startActivity(intent);
             }
         });
@@ -35,7 +52,13 @@ public class SortByActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-                intent.putExtra("ORDER_BY", false);
+
+                SharedPreferences.Editor mEditor = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE).edit();
+                mEditor.putBoolean("NAME_SURNAME", false);
+                mEditor.apply();
+
+                mName.setChecked(false);
+
                 startActivity(intent);
             }
         });

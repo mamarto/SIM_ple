@@ -13,7 +13,6 @@
             android:id="@+id/nameButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="@string/radio_button_first"/>
         <RadioButton
             android:id="@+id/surnameButton"
