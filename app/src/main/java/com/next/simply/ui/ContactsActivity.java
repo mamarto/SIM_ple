@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.next.simply.R;
 import com.next.simply.adapters.ContactAdapter;
 import com.next.simply.model.Phonebook;
+import com.next.simply.utils.SimplyConstants;
 
 import java.util.Map;
 
@@ -43,8 +44,8 @@ public class ContactsActivity extends AppCompatActivity {
 
         Phonebook phonebook = new Phonebook();
 
-        SharedPreferences mPrefs = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE);
-        mOrderByName = mPrefs.getBoolean("NAME_SURNAME", true);
+        SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
+        mOrderByName = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
 
         if (mOrderByName) {
             mContacts = phonebook.getAllMobileNumbersByName(this);
@@ -52,6 +53,16 @@ public class ContactsActivity extends AppCompatActivity {
         else {
             mContacts = phonebook.getAllMobileNumbersBySurname(this);
         }
+
+        String[] key = mContacts.keySet().toArray(new String[mContacts.size()]);
+        SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < key.length; i++) {
+            sb.append(key[i]).append(",");
+        }
+        mEditor.putString(SimplyConstants.KEY_CONTACTS_FILE, sb.toString());
+        mEditor.apply();
 
 
         final ContactAdapter adapter = new ContactAdapter(this, mContacts);
@@ -62,8 +73,8 @@ public class ContactsActivity extends AppCompatActivity {
                 Intent intent = new Intent(view.getContext(), EditContactActivity.class);
                 String item = adapter.getKey(position);
                 String number = adapter.getItem(position).toString();
-                intent.putExtra("CONTACT_NAME", item);
-                intent.putExtra("CONTACT_NUMBER", number);
+                intent.putExtra(SimplyConstants.KEY_CONTACT_NAME, item);
+                intent.putExtra(SimplyConstants.KEY_CONTACT_NUMBER, number);
                 startActivity(intent);
             }
         });

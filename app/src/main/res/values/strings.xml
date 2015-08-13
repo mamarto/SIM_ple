@@ -12,14 +12,16 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_show_contacts">SIM PLY</string>
     <string name="title_activity_sort_by">Sort by</string>
-    <string name="title_activity_import_export_contact">SIM PLY</string>
+    <string name="title_activity_import_export_contact">Import / Export contacts</string>
     <string name="title_activity_edit_contact">SIM PLY</string>
     <string name="search_hint">Find Contact</string>
     <string name="add_contact_name">Name</string>
     <string name="add_contact_surname">Surname</string>
     <string name="add_contact_telephone">Telephone</string>
-    <string name="radio_button_first">Name</string>
-    <string name="radio_button_second">Surname</string>
+    <string name="radio_button_first">First Name</string>
+    <string name="radio_button_second">Last Name</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="import_sim">Import from Sim</string>
+    <string name="export_sim">Export to Sim</string>
 </resources>

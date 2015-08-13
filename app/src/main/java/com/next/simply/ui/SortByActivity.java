@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.next.simply.R;
+import com.next.simply.utils.SimplyConstants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,8 +24,8 @@ public class SortByActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sort_by);
         ButterKnife.bind(this);
 
-        SharedPreferences mPrefs = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE);
-        boolean name = mPrefs.getBoolean("NAME_SURNAME", true);
+        SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
+        boolean name = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
 
         if (name) {
             mName.setChecked(true);
@@ -38,8 +39,8 @@ public class SortByActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
 
-                SharedPreferences.Editor mEditor = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE).edit();
-                mEditor.putBoolean("NAME_SURNAME", true).apply();
+                SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+                mEditor.putBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
                 mEditor.apply();
 
                 mSurname.setChecked(false);
@@ -53,8 +54,8 @@ public class SortByActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ContactsActivity.class);
 
-                SharedPreferences.Editor mEditor = getSharedPreferences("MY_PREFS_FILE", MODE_PRIVATE).edit();
-                mEditor.putBoolean("NAME_SURNAME", false);
+                SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+                mEditor.putBoolean(SimplyConstants.KEY_NAME_SURNAME, false);
                 mEditor.apply();
 
                 mName.setChecked(false);

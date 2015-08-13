@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.next.simply.R;
+import com.next.simply.utils.SimplyConstants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,8 +41,8 @@ public class EditContactActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mName = extras.getString("CONTACT_NAME");
-            mNumber = extras.getString("CONTACT_NUMBER");
+            mName = extras.getString(SimplyConstants.KEY_CONTACT_NAME);
+            mNumber = extras.getString(SimplyConstants.KEY_CONTACT_NUMBER);
             mActionBar.setTitle(Html.fromHtml("<b>" + mName + "</b>"));
             mNameContact.setText(mName);
             mNumberContact.setText(mNumber);
