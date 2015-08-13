@@ -3,6 +3,7 @@ package com.next.simply.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.next.simply.R;
 import com.next.simply.model.Phonebook;
+import com.next.simply.utils.SimplyConstants;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,6 +43,11 @@ public class AddContactActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle(Html.fromHtml("<b>Add new contact</b>"));
 
+        // ACCESSING LIST OF KEYS
+        SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
+        String names = mPrefs.getString(SimplyConstants.KEY_CONTACTS_FILE, "hello, world");
+        final String[] keys = names.split(",");
+
         mContext = getApplicationContext();
 
         mAddContact.setOnClickListener(new View.OnClickListener() {
@@ -49,11 +56,12 @@ public class AddContactActivity extends AppCompatActivity {
                 mName = mNameEditText.getText().toString();
                 mTelephone = mTelephoneEditText.getText().toString();
 
-                phonebook.createNewContact(mName, mTelephone, mContext);
 
-                Toast.makeText(mContext, "Contact Added.", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(mContext, ContactsActivity.class);
-                startActivity(intent);
+                if (phonebook.createNewContact(mName, keys, mTelephone, mContext)) {
+                    Toast.makeText(mContext, "Contact Added.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(mContext, ContactsActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

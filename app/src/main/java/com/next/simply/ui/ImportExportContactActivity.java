@@ -29,6 +29,7 @@ public class ImportExportContactActivity extends AppCompatActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
+        // ACCESSING LIST OF KEYS
         SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
         String names = mPrefs.getString(SimplyConstants.KEY_CONTACTS_FILE, "hello, world");
         final String[] keys = names.split(",");
