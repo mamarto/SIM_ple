@@ -24,4 +24,5 @@
     <string name="action_delete">Delete</string>
     <string name="import_sim">Import from Sim</string>
     <string name="export_sim">Export to Sim</string>
+    <string name="title_activity_splash">SIM PLY</string>
 </resources>
