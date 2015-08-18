@@ -1,5 +1,6 @@
 package com.next.simply.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,15 @@ public class ImportExportContactActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
 
-                phonebook.importSimContact(keys, mProgressBar, v.getContext());
+                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mExportToSim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phonebook.insertSIMContact(v.getContext());
             }
         });
     }

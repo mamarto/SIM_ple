@@ -7,10 +7,35 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.next.simply.ui.ShowContactsActivity">
-
-    <TextView
-        android:text="show contacts"
+<RadioGroup
+    android:layout_width="fill_parent"
+    android:id="@+id/showContactRadioGroup"
+    android:layout_height="fill_parent">
+    <RadioButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Phone"
+        android:id="@+id/phoneRadioButton"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sim"
+        android:id="@+id/simRadioButton"
+        android:layout_below="@+id/phoneRadioButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Both"
+        android:id="@+id/bothRadioButton"
+        android:layout_below="@+id/simRadioButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+    </RadioGroup>
 </RelativeLayout>

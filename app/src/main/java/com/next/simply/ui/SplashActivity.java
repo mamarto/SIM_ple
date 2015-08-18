@@ -27,11 +27,10 @@ public class SplashActivity extends AppCompatActivity {
                 } finally {
                     Intent intent = new Intent(SplashActivity.this, ContactsActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         };
         timerThread.start();
-
     }
-
 }

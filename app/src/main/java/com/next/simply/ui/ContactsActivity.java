@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.next.simply.R;
 import com.next.simply.adapters.ContactAdapter;
@@ -47,22 +48,32 @@ public class ContactsActivity extends AppCompatActivity {
         SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
         mOrderByName = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
 
-        if (mOrderByName) {
-            mContacts = phonebook.getAllMobileNumbersByName(this);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null && extras.getBoolean(SimplyConstants.IS_ORDERED_BY_SIM)) {
+            mContacts = phonebook.viewSimContact(this);
+            if (mContacts.isEmpty()) {
+                Toast.makeText(this, "There are no contacts in the SIM", Toast.LENGTH_LONG).show();
+            }
         }
         else {
-            mContacts = phonebook.getAllMobileNumbersBySurname(this);
+            mContacts = phonebook.getAllMobileNumbersByName(this);
         }
 
-        String[] key = mContacts.keySet().toArray(new String[mContacts.size()]);
-        SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < key.length; i++) {
-            sb.append(key[i]).append(",");
+        if (!mOrderByName) {
+            mContacts = phonebook.sortedByLastName(mContacts); // Maybe it is convenient to delete getAllMobileNumbersBySurname method.
         }
-        mEditor.putString(SimplyConstants.KEY_CONTACTS_FILE, sb.toString());
-        mEditor.apply();
+
+//        String[] key = mContacts.keySet().toArray(new String[mContacts.size()]);
+//        SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+//
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < key.length; i++) {
+//            sb.append(key[i]).append(",");
+//        }
+//        mEditor.putString(SimplyConstants.KEY_CONTACTS_FILE, sb.toString());
+//        mEditor.apply();
 
 
         final ContactAdapter adapter = new ContactAdapter(this, mContacts);

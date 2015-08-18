@@ -13,5 +13,6 @@ public class SimplyConstants {
     // intent
     public static final String KEY_CONTACT_NAME = "contactName";
     public static final String KEY_CONTACT_NUMBER = "contactNumber";
+    public static final String IS_ORDERED_BY_SIM = "orderedBySim";
 
 }

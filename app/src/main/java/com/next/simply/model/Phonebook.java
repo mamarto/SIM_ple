@@ -2,6 +2,7 @@ package com.next.simply.model;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
@@ -61,6 +62,18 @@ public class Phonebook {
         return sorted;
     }
 
+    public Map<String, String> sortedByLastName(Map<String, String> list) {
+        Map<String, String> contacts = new TreeMap<String, String>();
+
+        String[] mKeys = list.keySet().toArray(new String[list.size()]);
+
+        for(int i = 0; i < list.size(); i++) {
+            contacts.put(sortByLastName(mKeys[i]), list.get(sortByLastName(mKeys[i])));
+        }
+
+        return contacts;
+    }
+
     public boolean createNewContact(String name, String[] keys, String telephone, Context context) {
 
         if (areDifferent(name, keys)) {
@@ -109,28 +122,42 @@ public class Phonebook {
 
         progressBar.setVisibility(View.VISIBLE);
 
+        int index = 0;
 
-            //Map<String, String> contactNumbers = new TreeMap<String, String>();
+        Uri simUri = Uri.parse("content://icc/adn");
 
-            int index = 0;
+        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
 
-            Uri simUri = Uri.parse("content://icc/adn");
+        while (cursorSim.moveToNext()) {
+            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+            final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
 
-            Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
-
-            while (cursorSim.moveToNext()) {
-                final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
-                final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
-
-                if (areDifferent(name, keys)) {
-                    createNewContact(name, keys, number, context);
-                    index++;
-                }
-
+            if (areDifferent(name, keys)) {
+                 createNewContact(name, keys, number, context);
+                 index++;
             }
 
-            progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
+        }
+
+        progressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
+    }
+
+    public Map<String, String> viewSimContact(Context context) {
+        Map<String, String> contacts = new TreeMap<String, String>();
+
+        Uri simUri = Uri.parse("content://icc/adn");
+
+        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+
+        while (cursorSim.moveToNext()) {
+            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+            final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
+
+            contacts.put(name, number);
+        }
+
+        return contacts;
     }
 
     private boolean areDifferent(String name, String[] contacts) {
@@ -141,6 +168,17 @@ public class Phonebook {
             }
         }
         return true;
+    }
+
+    public void insertSIMContact(Context context) {
+        Uri simUri = Uri.parse("content://icc/adn");
+
+        ContentValues values = new ContentValues();
+        values.put("tag","Franco Schicchiz");
+        values.put("number", "123456789");
+
+        context.getContentResolver().insert(simUri, values);
+        context.getContentResolver().notifyChange(simUri, null);
     }
 
 }

@@ -1,39 +1,51 @@
 package com.next.simply.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.next.simply.R;
+import com.next.simply.model.Phonebook;
+import com.next.simply.utils.SimplyConstants;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class ShowContactsActivity extends AppCompatActivity {
+
+    @Bind(R.id.showContactRadioGroup) RadioGroup mRadioGroup;
+
+    @Bind(R.id.simRadioButton) RadioButton mSimRadioButton;
+    @Bind(R.id.phoneRadioButton) RadioButton mRadioButton;
+    @Bind(R.id.bothRadioButton) RadioButton mBothRadioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_contacts);
-    }
+        ButterKnife.bind(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_show_contacts, menu);
-        return true;
-    }
+        final Phonebook phonebook = new Phonebook();
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        mRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShowContactsActivity.this, ContactsActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_delete) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        mSimRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phonebook.viewSimContact(ShowContactsActivity.this);
+                Intent intent2 = new Intent(ShowContactsActivity.this, ContactsActivity.class);
+                intent2.putExtra(SimplyConstants.IS_ORDERED_BY_SIM, true);
+                startActivity(intent2);
+            }
+        });
     }
 }

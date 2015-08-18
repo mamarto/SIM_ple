@@ -43,8 +43,6 @@ public class SortByActivity extends AppCompatActivity {
                 mEditor.putBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
                 mEditor.apply();
 
-                mSurname.setChecked(false);
-
                 startActivity(intent);
             }
         });
@@ -57,8 +55,6 @@ public class SortByActivity extends AppCompatActivity {
                 SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
                 mEditor.putBoolean(SimplyConstants.KEY_NAME_SURNAME, false);
                 mEditor.apply();
-
-                mName.setChecked(false);
 
                 startActivity(intent);
             }
