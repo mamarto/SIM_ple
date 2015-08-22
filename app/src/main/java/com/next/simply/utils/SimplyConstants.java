@@ -15,4 +15,8 @@ public class SimplyConstants {
     public static final String KEY_CONTACT_NUMBER = "contactNumber";
     public static final String IS_ORDERED_BY_SIM = "orderedBySim";
 
+    public static final String KEY_KEYS_CONTACT = "KeysContact";
+    public static final String KEY_VALUES_CONTACT = "ValuesContact";
+    public static final String KEY_SHOW_BOTH = "showBoth";
+
 }

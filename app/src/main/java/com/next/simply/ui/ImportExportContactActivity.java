@@ -1,12 +1,11 @@
 package com.next.simply.ui;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.next.simply.R;
 import com.next.simply.model.Phonebook;
@@ -22,6 +21,9 @@ public class ImportExportContactActivity extends AppCompatActivity {
     @Bind(R.id.exportToSim) TextView mExportToSim;
     @Bind(R.id.progressBar) ProgressBar mProgressBar;
 
+    private String[] mKeys;
+    private String[] mValues;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +32,12 @@ public class ImportExportContactActivity extends AppCompatActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        // ACCESSING LIST OF KEYS
-        SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
-        String names = mPrefs.getString(SimplyConstants.KEY_CONTACTS_FILE, "hello, world");
-        final String[] keys = names.split(",");
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+            mKeys = extras.getStringArray(SimplyConstants.KEY_KEYS_CONTACT);
+            mValues = extras.getStringArray(SimplyConstants.KEY_VALUES_CONTACT);
+        }
 
         final Phonebook phonebook = new Phonebook();
 
@@ -42,16 +46,36 @@ public class ImportExportContactActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
 
-                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-                startActivity(intent);
+                phonebook.importSimContact(mKeys, mProgressBar, v.getContext());
+
+//                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+//                startActivity(intent);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         });
 
         mExportToSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phonebook.insertSIMContact(v.getContext());
+                addAllContactsToSim(v, phonebook, mProgressBar);
             }
         });
+    }
+
+    private void addAllContactsToSim(View v, Phonebook phonebook, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+
+        int index = 0;
+
+        for (int i = 0; i < mKeys.length; i++) {
+            if (phonebook.areDifferent(mKeys[i], phonebook.getSimNames(v.getContext()))) {
+                phonebook.insertSIMContact(mKeys[i], mValues[i], v.getContext());
+                index++;
+            }
+        }
+
+        Toast.makeText(v.getContext(), index + " contacts added.", Toast.LENGTH_LONG).show();
+
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

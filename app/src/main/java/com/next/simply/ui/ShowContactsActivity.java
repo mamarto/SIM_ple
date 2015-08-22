@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.next.simply.R;
 import com.next.simply.model.Phonebook;
@@ -15,8 +14,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ShowContactsActivity extends AppCompatActivity {
-
-    @Bind(R.id.showContactRadioGroup) RadioGroup mRadioGroup;
 
     @Bind(R.id.simRadioButton) RadioButton mSimRadioButton;
     @Bind(R.id.phoneRadioButton) RadioButton mRadioButton;
@@ -41,10 +38,19 @@ public class ShowContactsActivity extends AppCompatActivity {
         mSimRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phonebook.viewSimContact(ShowContactsActivity.this);
-                Intent intent2 = new Intent(ShowContactsActivity.this, ContactsActivity.class);
-                intent2.putExtra(SimplyConstants.IS_ORDERED_BY_SIM, true);
-                startActivity(intent2);
+                phonebook.getSimContacts(ShowContactsActivity.this);
+                Intent intent = new Intent(ShowContactsActivity.this, ContactsActivity.class);
+                intent.putExtra(SimplyConstants.IS_ORDERED_BY_SIM, true);
+                startActivity(intent);
+            }
+        });
+
+        mBothRadioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+                intent.putExtra(SimplyConstants.KEY_SHOW_BOTH, true);
+                startActivity(intent);
             }
         });
     }

@@ -143,7 +143,7 @@ public class Phonebook {
         Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
     }
 
-    public Map<String, String> viewSimContact(Context context) {
+    public Map<String, String> getSimContacts(Context context) {
         Map<String, String> contacts = new TreeMap<String, String>();
 
         Uri simUri = Uri.parse("content://icc/adn");
@@ -160,7 +160,23 @@ public class Phonebook {
         return contacts;
     }
 
-    private boolean areDifferent(String name, String[] contacts) {
+    public ArrayList<String> getSimNames(Context context) {
+        ArrayList<String> contacts = new ArrayList<String>();
+
+        Uri simUri = Uri.parse("content://icc/adn");
+
+        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+
+        while (cursorSim.moveToNext()) {
+            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+
+            contacts.add(name);
+        }
+
+        return contacts;
+    }
+
+    public boolean areDifferent(String name, String[] contacts) {
 
         for (String firstName : contacts) {
             if (name.equals(firstName)) {
@@ -170,12 +186,22 @@ public class Phonebook {
         return true;
     }
 
-    public void insertSIMContact(Context context) {
+    public boolean areDifferent(String name, ArrayList<String> contacts) {
+
+        for (String firstName : contacts) {
+            if (name.equals(firstName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void insertSIMContact(String name, String number, Context context) {
         Uri simUri = Uri.parse("content://icc/adn");
 
         ContentValues values = new ContentValues();
-        values.put("tag","Franco Schicchiz");
-        values.put("number", "123456789");
+        values.put("tag", name);
+        values.put("number", number);
 
         context.getContentResolver().insert(simUri, values);
         context.getContentResolver().notifyChange(simUri, null);
