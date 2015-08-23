@@ -68,7 +68,7 @@ public class Phonebook {
         String[] mKeys = list.keySet().toArray(new String[list.size()]);
 
         for(int i = 0; i < list.size(); i++) {
-            contacts.put(sortByLastName(mKeys[i]), list.get(sortByLastName(mKeys[i])));
+            contacts.put(sortByLastName(mKeys[i]), list.get(mKeys[i]));
         }
 
         return contacts;

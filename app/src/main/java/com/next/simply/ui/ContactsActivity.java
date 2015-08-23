@@ -32,6 +32,8 @@ import butterknife.OnClick;
 public class ContactsActivity extends AppCompatActivity {
     private static final String TAG = ContactsActivity.class.getSimpleName();
 
+    private ContactAdapter adapter;
+
     private Map<String, String> mContacts;
     private Map<String, String> mFilteredMap = new TreeMap<String, String>();
     private android.support.v7.app.ActionBar mActionBar;
@@ -64,12 +66,14 @@ public class ContactsActivity extends AppCompatActivity {
             Map<String, String> phone = phonebook.getAllMobileNumbersByName(this);
             mContacts.putAll(sim);
             mContacts.putAll(phone);
-        } else if (extras != null && extras.getBoolean(SimplyConstants.IS_ORDERED_BY_SIM)) {
+        }
+        else if (extras != null && extras.getBoolean(SimplyConstants.IS_ORDERED_BY_SIM)) {
             mContacts = phonebook.getSimContacts(this);
             if (mContacts.isEmpty()) {
                 Toast.makeText(this, "There are no contacts in the SIM", Toast.LENGTH_LONG).show();
             }
-        } else {
+        }
+        else {
             mContacts = phonebook.getAllMobileNumbersByName(this);
         }
 
@@ -77,27 +81,34 @@ public class ContactsActivity extends AppCompatActivity {
             mContacts = phonebook.sortedByLastName(mContacts);
         }
 
-        mKeys = mContacts.keySet().toArray(new String[mContacts.size()]);
         mValues = mContacts.values().toArray(new String[mContacts.size()]);
+        mKeys = mContacts.keySet().toArray(new String[mContacts.size()]);
 
         createContactAdapter(mContacts);
-    }
 
-    private void createContactAdapter(Map<String, String> contacts) {
-        final ContactAdapter adapter = new ContactAdapter(this, contacts);
-        mListView.setAdapter(adapter);
-        mListView.setEmptyView(mEmpty);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), EditContactActivity.class);
                 String item = adapter.getKey(position);
-                String number = adapter.getItem(position).toString();
+
+                if (mValues[position] == null) {
+                    intent.putExtra(SimplyConstants.KEY_CONTACT_NUMBER, "No number found");
+                } else {
+                    String number = adapter.getItem(position).toString();
+                    intent.putExtra(SimplyConstants.KEY_CONTACT_NUMBER, number);
+                }
+
                 intent.putExtra(SimplyConstants.KEY_CONTACT_NAME, item);
-                intent.putExtra(SimplyConstants.KEY_CONTACT_NUMBER, number);
                 startActivity(intent);
             }
         });
+    }
+
+    private void createContactAdapter(Map<String, String> contacts) {
+        adapter = new ContactAdapter(this, contacts);
+        mListView.setAdapter(adapter);
+        mListView.setEmptyView(mEmpty);
     }
 
     @Override
@@ -120,20 +131,21 @@ public class ContactsActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                for (String name : mContacts.keySet()) {
+                for (String name : mKeys) {
+                    String number = mContacts.get(name);
                     name = name.trim();
                     if (name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
-                        mFilteredMap.put(name, mContacts.get(name)); // mContacts.get(name)
+                        mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
                     }
 
-                    if (! name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                    if (!name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.remove(name);
 
-                        if (mFilteredMap.size() > 1) {
+                        if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
                     }
@@ -143,8 +155,6 @@ public class ContactsActivity extends AppCompatActivity {
                         createContactAdapter(mContacts);
                     }
                 }
-
-
                 return false;
             }
         });

@@ -2,7 +2,7 @@
     <string name="app_name">Sim ply</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_show_contacts">Show contacts</string>
+    <string name="action_show_contacts">Contacts to display</string>
     <string name="title_activity_contacts">SIM PLY</string>
     <string name="no_contacts">There are no contacts to display.</string>
     <string name="action_search">Search</string>

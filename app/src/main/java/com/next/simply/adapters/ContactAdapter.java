@@ -70,7 +70,7 @@ public class ContactAdapter extends BaseAdapter {
         holder.callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                number = getItem(position).toString();
+                number = mListNumbers.get(mKeys[position]);
                 String dial = "tel:" + number;
                 Uri telUri = Uri.parse(dial);
                 Intent intent = new Intent(Intent.ACTION_DIAL, telUri);
@@ -81,7 +81,7 @@ public class ContactAdapter extends BaseAdapter {
         holder.messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                number = getItem(position).toString();
+                number = mListNumbers.get(mKeys[position]);
                 String dial = "sms:" + number;
                 Uri telUri = Uri.parse(dial);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
