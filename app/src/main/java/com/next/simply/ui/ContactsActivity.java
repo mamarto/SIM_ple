@@ -34,6 +34,8 @@ public class ContactsActivity extends AppCompatActivity {
 
     private ContactAdapter adapter;
 
+    private Phonebook phonebook;
+
     private Map<String, String> mContacts;
     private Map<String, String> mFilteredMap = new TreeMap<String, String>();
     private android.support.v7.app.ActionBar mActionBar;
@@ -54,8 +56,12 @@ public class ContactsActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         mActionBar.setTitle(Html.fromHtml("<b>SIM PLY</b>"));
 
-        Phonebook phonebook = new Phonebook();
+        phonebook = new Phonebook();
 
+        getContacts();
+    }
+
+    private void getContacts() {
         SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
         mOrderByName = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
 
@@ -105,6 +111,12 @@ public class ContactsActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getContacts();
+    }
+
     private void createContactAdapter(Map<String, String> contacts) {
         adapter = new ContactAdapter(this, contacts);
         mListView.setAdapter(adapter);
@@ -122,6 +134,8 @@ public class ContactsActivity extends AppCompatActivity {
 
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
 
+        search.setQueryHint(Html.fromHtml("Search contacts"));
+
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -134,6 +148,8 @@ public class ContactsActivity extends AppCompatActivity {
                 for (String name : mKeys) {
                     String number = mContacts.get(name);
                     name = name.trim();
+
+                    // Add
                     if (name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.put(name, number);
 
@@ -141,18 +157,35 @@ public class ContactsActivity extends AppCompatActivity {
                             createContactAdapter(mFilteredMap);
                         }
                     }
+                    else {
+                    // Delete
+                        if (!name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                            mFilteredMap.remove(name);
 
-                    if (!name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
-                        mFilteredMap.remove(name);
+                            if (mFilteredMap.size() > 0) {
+                                createContactAdapter(mFilteredMap);
+                            }
+                        }
+                        if (newText.length() == 0) {
+                            mFilteredMap.clear();
+                            createContactAdapter(mContacts);
+                        }
+                    }
+
+                    String split[] = name.split(" ");
+                    if (split[1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                        mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
                     }
+                    else if (split[split.length - 1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                        mFilteredMap.put(name, number);
 
-                    if (newText.length() == 0) {
-                        mFilteredMap.clear();
-                        createContactAdapter(mContacts);
+                        if (mFilteredMap.size() > 0) {
+                            createContactAdapter(mFilteredMap);
+                        }
                     }
                 }
                 return false;

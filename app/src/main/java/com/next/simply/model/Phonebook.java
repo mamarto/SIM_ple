@@ -37,21 +37,6 @@ public class Phonebook {
         return contacts;
     }
 
-    public Map<String, String> getAllMobileNumbersBySurname(final Context context) {
-        Map<String, String> contacts = new TreeMap<String, String>();
-        final Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (cursor.moveToNext()) {
-            final int phone_id = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            final String contactName = cursor.getString(phone_id);
-
-            final int phone_number = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-            final String contactNumber = cursor.getString(phone_number);
-
-            contacts.put(sortByLastName(contactName), contactNumber);
-        }
-        return contacts;
-    }
-
     private String sortByLastName(String toSort) {
         String sorted = "";
         String[] split = toSort.split(" ");
@@ -116,6 +101,42 @@ public class Phonebook {
             Toast.makeText(context, "Contact already exists", Toast.LENGTH_LONG).show();
         }
         return false;
+    }
+
+    public void createNewContact(String name, String telephone, Context context) {
+
+            ArrayList<ContentProviderOperation> cntProOper = new ArrayList<ContentProviderOperation>();
+            int contactIndex = cntProOper.size();//ContactSize
+
+            //Newly Inserted contact
+            // A raw contact will be inserted ContactsContract.RawContacts table in contacts database.
+            cntProOper.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)//Step1
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
+
+            //Display name will be inserted in ContactsContract.Data table
+            cntProOper.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)//Step2
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, contactIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, name) // Name of the contact
+                    .build());
+            //Mobile number will be inserted in ContactsContract.Data table
+            cntProOper.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)//Step 3
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, contactIndex)
+                    .withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, telephone) // Number to be added
+                    .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).build()); //Type like HOME, MOBILE etc
+            try {
+                // We will do batch operation to insert all above data
+                //Contains the output of the app of a ContentProviderOperation.
+                //It is sure to have exactly one of uri or count set
+                ContentProviderResult[] contentProresult = null;
+                contentProresult = context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, cntProOper); //apply above data insertion into contacts list
+            } catch (RemoteException exp) {
+                //logs;
+            } catch (OperationApplicationException exp) {
+                //logs
+            }
     }
 
     public void importSimContact(String[] keys, ProgressBar progressBar, Context context) {
@@ -205,6 +226,30 @@ public class Phonebook {
 
         context.getContentResolver().insert(simUri, values);
         context.getContentResolver().notifyChange(simUri, null);
+    }
+
+    public boolean deleteContact(Context context, String phone, String name) {
+        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
+        Cursor cur = context.getContentResolver().query(contactUri, null, null, null, null);
+        try {
+            if (cur.moveToFirst()) {
+                do {
+                    if (cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)).equalsIgnoreCase(name)) {
+                        String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
+                        context.getContentResolver().delete(uri, null, null);
+                        return true;
+                    }
+
+                }
+                while (cur.moveToNext());
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+
+        return false;
     }
 
 }
