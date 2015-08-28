@@ -61,7 +61,7 @@ public class AddContactActivity extends AppCompatActivity {
                 mTelephone = mTelephoneEditText.getText().toString();
 
 
-                if (phonebook.createNewContact(mName, mKeys, mTelephone, mContext)) {
+                if (phonebook.createNewContact(mName, mKeys, mTelephone, mContext) && mKeys.length > 0) {
                     Toast.makeText(mContext, "Contact Added.", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(mContext, ContactsActivity.class);
                     startActivity(intent);
