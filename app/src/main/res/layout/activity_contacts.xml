@@ -24,8 +24,8 @@
         android:id="@+id/empty"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/addContact"
         android:src="@drawable/ic_add_contact"
         android:layout_alignParentBottom="true"

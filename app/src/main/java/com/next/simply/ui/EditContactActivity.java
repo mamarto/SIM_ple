@@ -1,7 +1,9 @@
 package com.next.simply.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
@@ -78,12 +80,24 @@ public class EditContactActivity extends AppCompatActivity {
             mNameContact.requestFocus();
         }
         else if (id == R.id.action_delete) {
-            mPhonebook.deleteContact(this, mNumber, mName);
 
-            Toast.makeText(this, "Contact removed", Toast.LENGTH_LONG).show();
+            new AlertDialog.Builder(this)
+                    .setMessage("This contact will be deleted.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            mPhonebook.deleteContact(EditContactActivity.this, mNumber, mName);
+                            Toast.makeText(EditContactActivity.this, "Contact removed", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(EditContactActivity.this, ContactsActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .show();
 
-            Intent intent = new Intent(this, ContactsActivity.class);
-            startActivity(intent);
         }
         else if (id == android.R.id.home) {
             mPhonebook.deleteContact(this, mNumber, mName);

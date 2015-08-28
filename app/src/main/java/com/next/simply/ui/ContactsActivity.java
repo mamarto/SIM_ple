@@ -134,7 +134,7 @@ public class ContactsActivity extends AppCompatActivity {
 
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
 
-        search.setQueryHint(Html.fromHtml("Search contacts"));
+        search.setQueryHint("Search contacts");
 
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -172,15 +172,15 @@ public class ContactsActivity extends AppCompatActivity {
                         }
                     }
 
-                    String split[] = name.split(" ");
-                    if (split[1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                    String[] split = name.split(" ");
+                    if (split.length > 1 && split[1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
                     }
-                    else if (split[split.length - 1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
+                    else if (split.length > 1 && split[split.length - 1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
@@ -225,6 +225,8 @@ public class ContactsActivity extends AppCompatActivity {
     @OnClick(R.id.addContact)
     public void startAddActivity() {
         Intent intent = new Intent(this, AddContactActivity.class);
+        intent.putExtra(SimplyConstants.KEY_KEYS_CONTACT, mKeys);
+        intent.putExtra(SimplyConstants.KEY_VALUES_CONTACT, mValues);
         startActivity(intent);
     }
 }
