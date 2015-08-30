@@ -25,4 +25,8 @@
     <string name="import_sim">Import from Sim</string>
     <string name="export_sim">Export to Sim</string>
     <string name="title_activity_splash">SIM PLY</string>
+    <string name="contact_empty">No contacts to display</string>
+    <string name="contact_to_display_phone">Phone</string>
+    <string name="contact_to_display_sim">SIM</string>
+    <string name="contact_to_display_both">Both</string>
 </resources>

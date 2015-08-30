@@ -10,13 +10,16 @@ public class SimplyConstants {
     public static final String KEY_NAME_SURNAME = "nameSurname";
     public static final String KEY_CONTACTS_FILE = "contacts";
 
+    public static final String KEY_SHOW_SIM = "showSim";
+    public static final String KEY_SHOW_BOTH = "showBoth";
+    public static final String KEY_SHOW_PHONE = "showPhone";
+
+
     // intent
     public static final String KEY_CONTACT_NAME = "contactName";
     public static final String KEY_CONTACT_NUMBER = "contactNumber";
-    public static final String IS_ORDERED_BY_SIM = "orderedBySim";
 
     public static final String KEY_KEYS_CONTACT = "KeysContact";
     public static final String KEY_VALUES_CONTACT = "ValuesContact";
-    public static final String KEY_SHOW_BOTH = "showBoth";
 
 }

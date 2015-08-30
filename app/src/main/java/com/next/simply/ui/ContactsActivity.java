@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.next.simply.adapters.ContactAdapter;
 import com.next.simply.model.Phonebook;
 import com.next.simply.utils.SimplyConstants;
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -42,8 +44,13 @@ public class ContactsActivity extends AppCompatActivity {
     private String[] mKeys;
     private String[] mValues;
 
-    private boolean mOrderByName;
+    private String mSearchFailed = "No contact named ";
 
+    private boolean mOrderByName;
+    private boolean mIsShownBySim;
+    private boolean mShowBoth;
+
+    @Bind(R.id.empty2) TextView mEmptySearch;
     @Bind(R.id.empty) TextView mEmpty;
     @Bind(R.id.listView) ListView mListView;
 
@@ -65,15 +72,20 @@ public class ContactsActivity extends AppCompatActivity {
         SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
         mOrderByName = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);
 
-        Bundle extras = getIntent().getExtras();
+        mIsShownBySim = mPrefs.getBoolean(SimplyConstants.KEY_SHOW_SIM, false);
+        mShowBoth = mPrefs.getBoolean(SimplyConstants.KEY_SHOW_BOTH, false);
 
-        if (extras != null && extras.getBoolean(SimplyConstants.IS_ORDERED_BY_SIM) && extras.getBoolean(SimplyConstants.KEY_SHOW_BOTH)) {
+        mContacts = new TreeMap<String, String>();
+
+        if (mShowBoth) {
             Map<String, String> sim = phonebook.getSimContacts(this);
             Map<String, String> phone = phonebook.getAllMobileNumbersByName(this);
-            mContacts.putAll(sim);
+            if(sim.size() > 0) {
+                mContacts.putAll(sim);
+            }
             mContacts.putAll(phone);
         }
-        else if (extras != null && extras.getBoolean(SimplyConstants.IS_ORDERED_BY_SIM)) {
+        else if (mIsShownBySim) {
             mContacts = phonebook.getSimContacts(this);
             if (mContacts.isEmpty()) {
                 Toast.makeText(this, "There are no contacts in the SIM", Toast.LENGTH_LONG).show();
@@ -87,6 +99,7 @@ public class ContactsActivity extends AppCompatActivity {
             mContacts = phonebook.sortedByLastName(mContacts);
         }
 
+        // Retrieving names and numbers from Map
         mValues = mContacts.values().toArray(new String[mContacts.size()]);
         mKeys = mContacts.keySet().toArray(new String[mContacts.size()]);
 
@@ -129,13 +142,17 @@ public class ContactsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_contacts, menu);
 
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         SearchView search = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
         search.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-
         search.setQueryHint("Search contacts");
 
+        AutoCompleteTextView searchTextView = (AutoCompleteTextView) search.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        try {
+            Field mCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            mCursorDrawableRes.setAccessible(true);
+            mCursorDrawableRes.set(searchTextView, R.drawable.cursor); //This sets the cursor resource ID to 0 or @null which will make it visible on white background
+        } catch (Exception e) {
+        }
 
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -149,21 +166,27 @@ public class ContactsActivity extends AppCompatActivity {
                     String number = mContacts.get(name);
                     name = name.trim();
 
-                    // Add
+                    // Search from the start
                     if (name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
+                        else {
+                            setEmptyText(newText);
+                        }
                     }
                     else {
-                    // Delete
+                        // Delete
                         if (!name.toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                             mFilteredMap.remove(name);
 
                             if (mFilteredMap.size() > 0) {
                                 createContactAdapter(mFilteredMap);
+                            }
+                            else {
+                                setEmptyText(newText);
                             }
                         }
                         if (newText.length() == 0) {
@@ -171,13 +194,16 @@ public class ContactsActivity extends AppCompatActivity {
                             createContactAdapter(mContacts);
                         }
                     }
-
+                    // Searching from the end
                     String[] split = name.split(" ");
                     if (split.length > 1 && split[1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
                         mFilteredMap.put(name, number);
 
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
+                        }
+                        else {
+                            setEmptyText(newText);
                         }
                     }
                     else if (split.length > 1 && split[split.length - 1].toLowerCase().startsWith(newText.toLowerCase()) && newText.length() > 0) {
@@ -186,6 +212,9 @@ public class ContactsActivity extends AppCompatActivity {
                         if (mFilteredMap.size() > 0) {
                             createContactAdapter(mFilteredMap);
                         }
+                        else {
+                            setEmptyText(newText);
+                        }
                     }
                 }
                 return false;
@@ -193,6 +222,11 @@ public class ContactsActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    private void setEmptyText(String newText) {
+        mEmptySearch.setText(Html.fromHtml(mSearchFailed + "<b>'" + newText + "'</b>"));
+        mListView.setEmptyView(mEmptySearch);
     }
 
     @Override

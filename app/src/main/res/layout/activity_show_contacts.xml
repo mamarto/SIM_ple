@@ -5,37 +5,57 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
+                android:background="@android:color/white"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.next.simply.ui.ShowContactsActivity">
 <RadioGroup
     android:layout_width="fill_parent"
+    android:layout_marginTop="10dp"
     android:id="@+id/showContactRadioGroup"
     android:layout_height="fill_parent">
     <RadioButton
+        android:text="@string/contact_to_display_phone"
+        android:id="@+id/phoneRadioButton"
+        android:layout_alignParentTop="true"
+        style="@style/radioButton"/>
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phone"
-        android:id="@+id/phoneRadioButton"
+        android:src="@drawable/ic_line_gold"
+        android:id="@+id/imageView4"/>
+
+    <RadioButton
+        android:text="@string/contact_to_display_sim"
+        android:id="@+id/simRadioButton"
+        android:layout_below="@+id/phoneRadioButton"
+        style="@style/radioButton"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_line_gold"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView5"/>
+
+    <RadioButton
+        android:text="@string/contact_to_display_both"
+        android:id="@+id/bothRadioButton"
+        android:layout_below="@+id/simRadioButton"
+        style="@style/radioButton"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_line_gold"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView6"/>
+</RadioGroup>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_line_gold"
+        android:id="@+id/imageView7"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sim"
-        android:id="@+id/simRadioButton"
-        android:layout_below="@+id/phoneRadioButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Both"
-        android:id="@+id/bothRadioButton"
-        android:layout_below="@+id/simRadioButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-    </RadioGroup>
 </RelativeLayout>

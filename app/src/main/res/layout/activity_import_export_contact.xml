@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
+                android:background="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -13,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/import_sim"
+        style="@style/radioButton"
         android:id="@+id/importFromSim"
-        android:textSize="30dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -23,17 +24,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/export_sim"
-        android:textSize="30dp"
+        style="@style/radioButton"
         android:id="@+id/exportToSim"
         android:layout_below="@+id/importFromSim"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <ProgressBar
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:src="@drawable/ic_line_gold"
+        android:id="@+id/imageView9"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_line_gold"
+        android:id="@+id/imageView10"
+        android:layout_below="@+id/importFromSim"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_line_gold"
+        android:id="@+id/imageView11"
+        android:layout_below="@+id/exportToSim"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

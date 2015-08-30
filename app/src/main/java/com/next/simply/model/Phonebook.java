@@ -9,8 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -139,10 +137,7 @@ public class Phonebook {
             }
     }
 
-    public void importSimContact(String[] keys, ProgressBar progressBar, Context context) {
-
-        progressBar.setVisibility(View.VISIBLE);
-
+    public void importSimContact(String[] keys, Context context) {
         int index = 0;
 
         Uri simUri = Uri.parse("content://icc/adn");
@@ -159,8 +154,6 @@ public class Phonebook {
             }
 
         }
-
-        progressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
     }
 

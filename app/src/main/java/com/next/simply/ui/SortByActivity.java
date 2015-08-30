@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.RadioButton;
 
@@ -15,6 +16,8 @@ import butterknife.ButterKnife;
 
 public class SortByActivity extends AppCompatActivity {
 
+    private android.support.v7.app.ActionBar mActionBar;
+
     @Bind(R.id.nameButton) RadioButton mName;
     @Bind(R.id.surnameButton) RadioButton mSurname;
 
@@ -23,6 +26,9 @@ public class SortByActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sort_by);
         ButterKnife.bind(this);
+
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle(Html.fromHtml("<b>Sort by</b>"));
 
         SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
         boolean name = mPrefs.getBoolean(SimplyConstants.KEY_NAME_SURNAME, true);

@@ -2,6 +2,7 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.next.simply.ui.ContactsActivity">
+
     <item android:id="@+id/action_show_contacts"
           android:title="@string/action_show_contacts"
           android:orderInCategory="100"
@@ -21,5 +22,4 @@
           app:showAsAction="collapseActionView|ifRoom"
           app:actionViewClass="android.support.v7.widget.SearchView"
           android:actionViewClass="android.support.v7.widget.SearchView" />
-
 </menu>
