@@ -2,8 +2,11 @@ package com.next.simply.ui;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
@@ -28,6 +31,9 @@ public class AddContactActivity extends AppCompatActivity {
 
     private String[] mKeys;
     private String[] mValues;
+    private boolean mShowBoth;
+
+    private boolean mIsShownBySim;
 
 
     @Bind(R.id.nameEditText) EditText mNameEditText;
@@ -39,6 +45,11 @@ public class AddContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
         ButterKnife.bind(this);
+
+        SharedPreferences mPrefs = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE);
+        mIsShownBySim = mPrefs.getBoolean(SimplyConstants.KEY_SHOW_SIM, false);
+        mShowBoth = mPrefs.getBoolean(SimplyConstants.KEY_SHOW_BOTH, false);
+
 
         final Phonebook phonebook = new Phonebook();
 
@@ -60,13 +71,51 @@ public class AddContactActivity extends AppCompatActivity {
                 mName = mNameEditText.getText().toString();
                 mTelephone = mTelephoneEditText.getText().toString();
 
-
-                if (phonebook.createNewContact(mName, mKeys, mTelephone, mContext) && mKeys.length > 0) {
-                    Toast.makeText(mContext, "Contact Added.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(mContext, ContactsActivity.class);
-                    startActivity(intent);
-                }
+                new AlertDialog.Builder(v.getContext())
+                        .setMessage("Where do you want to save this contact?")
+                        .setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (addSim(phonebook)) {
+                                    Intent intent = new Intent(mContext, ContactsActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .setNegativeButton("PHONE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (addPhone(phonebook)) {
+                                    Intent intent = new Intent(mContext, ContactsActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .setNeutralButton("BOTH", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (addSim(phonebook) && addPhone(phonebook)) {
+                                    Intent intent = new Intent(mContext, ContactsActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .show();
             }
         });
+    }
+
+    private boolean addPhone(Phonebook phonebook) {
+        if (phonebook.createNewContact(mName, mKeys, mTelephone, mContext) && mKeys.length > 0) {
+            Toast.makeText(mContext, "Contact added to the phone.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean addSim(Phonebook phonebook) {
+        if (phonebook.insertSIMContact(mName, mTelephone, mContext)) {
+            Toast.makeText(mContext, "Contact added to the SIM.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 }

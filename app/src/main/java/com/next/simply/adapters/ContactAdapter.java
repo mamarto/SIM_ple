@@ -65,7 +65,12 @@ public class ContactAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.nameLabel.setText(mKeys[position]);
+        String contact = mKeys[position];
+
+        if (contact.length() > 18) {
+            contact = contact.substring(0, 18) + "...";
+        }
+        holder.nameLabel.setText(contact);
 
         holder.callButton.setOnClickListener(new View.OnClickListener() {
             @Override

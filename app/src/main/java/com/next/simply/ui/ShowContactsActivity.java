@@ -68,35 +68,45 @@ public class ShowContactsActivity extends AppCompatActivity {
         mSimRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShowContactsActivity.this, ContactsActivity.class);
+                if (phonebook.isSimAvailable(v.getContext())) {
+                    Intent intent = new Intent(ShowContactsActivity.this, ContactsActivity.class);
 
-                SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_SIM, true);
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_BOTH, false);
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_PHONE, false);
+                    SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_SIM, true);
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_BOTH, false);
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_PHONE, false);
 
-                mEditor.apply();
+                    mEditor.apply();
 
-                startActivity(intent);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(v.getContext(), R.string.sim_not_available, Toast.LENGTH_LONG).show();
+                }
             }
         });
 
         mBothRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (phonebook.getSimContacts(ShowContactsActivity.this).size() == 0) {
-                    Toast.makeText(v.getContext(), "There are no contacts in the SIM", Toast.LENGTH_LONG).show();
+                if (phonebook.isSimAvailable(v.getContext())) {
+                    if (phonebook.getSimContacts(ShowContactsActivity.this).size() == 0) {
+                        Toast.makeText(v.getContext(), "There are no contacts in the SIM", Toast.LENGTH_LONG).show();
+                    }
+
+                    Intent intent = new Intent(v.getContext(), ContactsActivity.class);
+
+                    SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_BOTH, true);
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_SIM, false);
+                    mEditor.putBoolean(SimplyConstants.KEY_SHOW_PHONE, false);
+                    mEditor.apply();
+
+                    startActivity(intent);
                 }
-
-                Intent intent = new Intent(v.getContext(), ContactsActivity.class);
-
-                SharedPreferences.Editor mEditor = getSharedPreferences(SimplyConstants.KEY_FILE, MODE_PRIVATE).edit();
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_BOTH, true);
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_SIM, false);
-                mEditor.putBoolean(SimplyConstants.KEY_SHOW_PHONE, false);
-                mEditor.apply();
-
-                startActivity(intent);
+                else {
+                    Toast.makeText(v.getContext(), R.string.sim_not_available, Toast.LENGTH_LONG).show();
+                }
             }
         });
     }

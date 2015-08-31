@@ -10,7 +10,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
+
+import com.next.simply.R;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -97,7 +100,7 @@ public class Phonebook {
             }
         }
         else {
-            Toast.makeText(context, "Contact already exists", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Contact already exists in the phone", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -136,56 +139,73 @@ public class Phonebook {
             } catch (OperationApplicationException exp) {
                 //logs
             }
-    }
+    } // **************REMOVE BEFORE FLIGHT******************
 
     public void importSimContact(String[] keys, Context context) {
-        int index = 0;
+        if (isSimAvailable(context)) {
+            int index = 0;
 
-        Uri simUri = Uri.parse("content://icc/adn");
+            Uri simUri = Uri.parse("content://icc/adn");
 
-        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+            Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
 
-        while (cursorSim.moveToNext()) {
-            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
-            final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
+            while (cursorSim.moveToNext()) {
+                final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+                final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
 
-            if (areDifferent(name, keys)) {
-                 createNewContact(name, keys, number, context);
-                 index++;
+                if (areDifferent(name, keys)) {
+                    createNewContact(name, keys, number, context);
+                    index++;
+                }
+
             }
-
+            Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
+        }
     }
 
     public Map<String, String> getSimContacts(Context context) {
+
         Map<String, String> contacts = new TreeMap<String, String>();
 
-        Uri simUri = Uri.parse("content://icc/adn");
+        if (isSimAvailable(context)) {
 
-        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+            Uri simUri = Uri.parse("content://icc/adn");
 
-        while (cursorSim.moveToNext()) {
-            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
-            final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
+            Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
 
-            contacts.put(name, number);
+            while (cursorSim.moveToNext()) {
+                final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+                final String number = cursorSim.getString(cursorSim.getColumnIndex("number"));
+
+                contacts.put(name, number);
+            }
         }
-
+        else {
+            Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
+        }
         return contacts;
     }
 
     public ArrayList<String> getSimNames(Context context) {
         ArrayList<String> contacts = new ArrayList<String>();
 
-        Uri simUri = Uri.parse("content://icc/adn");
+        if (isSimAvailable(context)) {
 
-        Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
+            Uri simUri = Uri.parse("content://icc/adn");
 
-        while (cursorSim.moveToNext()) {
-            final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+            Cursor cursorSim = context.getContentResolver().query(simUri, null, null, null, null);
 
-            contacts.add(name);
+            while (cursorSim.moveToNext()) {
+                final String name = cursorSim.getString(cursorSim.getColumnIndex("name"));
+
+                contacts.add(name);
+            }
+        }
+        else {
+            Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
         }
 
         return contacts;
@@ -211,15 +231,32 @@ public class Phonebook {
         return true;
     }
 
-    public void insertSIMContact(String name, String number, Context context) {
-        Uri simUri = Uri.parse("content://icc/adn");
+    public boolean insertSIMContact(String name, String number, Context context) {
+        if (isSimAvailable(context)) {
+            if (name.length() < 16) {
+                if (areDifferent(name, getSimNames(context))) {
+                    Uri simUri = Uri.parse("content://icc/adn");
 
-        ContentValues values = new ContentValues();
-        values.put("tag", name);
-        values.put("number", number);
+                    ContentValues values = new ContentValues();
+                    values.put("tag", name);
+                    values.put("number", number);
 
-        context.getContentResolver().insert(simUri, values);
-        context.getContentResolver().notifyChange(simUri, null);
+                    context.getContentResolver().insert(simUri, values);
+                    context.getContentResolver().notifyChange(simUri, null);
+                    return true;
+                }
+                else {
+                    Toast.makeText(context, "Contact already exists in the SIM", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else {
+                Toast.makeText(context, "Contact name must be less than 16 characters!", Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
+        }
+        return false;
     }
 
     public boolean deleteContact(Context context, String name) {
@@ -262,6 +299,33 @@ public class Phonebook {
                 System.out.println(e.getStackTrace());
             }
         }
+    }
+
+    public void addAllContactsToSim(Context context, String[] keys, String[] values) {
+        if (isSimAvailable(context)) {
+
+            int index = 0;
+
+            for (int i = 0; i < keys.length; i++) {
+                if (areDifferent(keys[i], getSimNames(context))) {
+                    insertSIMContact(keys[i], values[i], context);
+                    index++;
+                }
+            }
+            Toast.makeText(context, index + " contacts added.", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public boolean isSimAvailable(Context context) {
+        TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        int simState = telMgr.getSimState();
+        if (simState == TelephonyManager.SIM_STATE_ABSENT) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -46,7 +46,7 @@ public class ContactsActivity extends AppCompatActivity {
     private String[] mKeys;
     private String[] mValues;
 
-    private String mSearchFailed = "No contact named ";
+    final private String mSearchFailed = "No contact named ";
 
     private boolean mOrderByName;
     private boolean mIsShownBySim;

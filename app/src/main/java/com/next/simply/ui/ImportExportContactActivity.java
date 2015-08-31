@@ -5,11 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.next.simply.R;
 import com.next.simply.model.Phonebook;
 import com.next.simply.utils.SimplyConstants;
+
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -20,6 +21,9 @@ public class ImportExportContactActivity extends AppCompatActivity {
 
     @Bind(R.id.importFromSim) TextView mImportFromSim;
     @Bind(R.id.exportToSim) TextView mExportToSim;
+
+    Map<String, String> mContacts;
+
 
     private String[] mKeys;
     private String[] mValues;
@@ -45,7 +49,6 @@ public class ImportExportContactActivity extends AppCompatActivity {
         mImportFromSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 phonebook.importSimContact(mKeys, v.getContext());
             }
         });
@@ -53,22 +56,15 @@ public class ImportExportContactActivity extends AppCompatActivity {
         mExportToSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addAllContactsToSim(v, phonebook);
+                mContacts = phonebook.getAllMobileNumbersByName(v.getContext());
+
+                mKeys = mContacts.keySet().toArray(new String[mContacts.size()]);
+                mValues = mContacts.values().toArray(new String[mContacts.size()]);
+
+                phonebook.addAllContactsToSim(v.getContext(), mKeys, mValues);
             }
         });
     }
 
-    private void addAllContactsToSim(View v, Phonebook phonebook) {
 
-        int index = 0;
-
-        for (int i = 0; i < mKeys.length; i++) {
-            if (phonebook.areDifferent(mKeys[i], phonebook.getSimNames(v.getContext()))) {
-                phonebook.insertSIMContact(mKeys[i], mValues[i], v.getContext());
-                index++;
-            }
-        }
-
-        Toast.makeText(v.getContext(), index + " contacts added.", Toast.LENGTH_LONG).show();
-    }
 }
