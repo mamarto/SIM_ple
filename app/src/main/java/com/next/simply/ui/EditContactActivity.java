@@ -80,12 +80,11 @@ public class EditContactActivity extends AppCompatActivity {
             mNameContact.requestFocus();
         }
         else if (id == R.id.action_delete) {
-
             new AlertDialog.Builder(this)
                     .setMessage("This contact will be deleted.")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            mPhonebook.deleteContact(EditContactActivity.this, mNumber, mName);
+                            mPhonebook.deleteContact(EditContactActivity.this, mName);
                             Toast.makeText(EditContactActivity.this, "Contact removed", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(EditContactActivity.this, ContactsActivity.class);
                             startActivity(intent);
@@ -98,10 +97,6 @@ public class EditContactActivity extends AppCompatActivity {
                     })
                     .show();
 
-        }
-        else if (id == android.R.id.home) {
-            mPhonebook.deleteContact(this, mNumber, mName);
-            mPhonebook.createNewContact(mNameContact.getText().toString(), mNumberContact.getText().toString(), this);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -2,6 +2,7 @@ package com.next.simply.model;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -221,28 +222,46 @@ public class Phonebook {
         context.getContentResolver().notifyChange(simUri, null);
     }
 
-    public boolean deleteContact(Context context, String phone, String name) {
-        Uri contactUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phone));
-        Cursor cur = context.getContentResolver().query(contactUri, null, null, null, null);
+    public boolean deleteContact(Context context, String name) {
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
         try {
-            if (cur.moveToFirst()) {
+            if (cursor.moveToFirst()) {
                 do {
-                    if (cur.getString(cur.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)).equalsIgnoreCase(name)) {
-                        String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                    if (cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)).equalsIgnoreCase(name)) {
+                        String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
                         Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
-                        context.getContentResolver().delete(uri, null, null);
+                        cr.delete(uri, null, null);
                         return true;
                     }
 
                 }
-                while (cur.moveToNext());
+                while (cursor.moveToNext());
             }
         }
         catch (Exception e) {
             System.out.println(e.getStackTrace());
         }
-
         return false;
+    }
+
+    public void deleteAll(Context context) {
+        ContentResolver cr = context.getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+        while (cur.moveToNext()) {
+            try{
+                String lookupKey = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, lookupKey);
+                System.out.println("The uri is " + uri.toString());
+                cr.delete(uri, null, null);
+            }
+            catch(Exception e)
+            {
+                System.out.println(e.getStackTrace());
+            }
+        }
     }
 
 }

@@ -2,9 +2,11 @@ package com.next.simply.ui;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.Html;
@@ -251,6 +253,23 @@ public class ContactsActivity extends AppCompatActivity {
                 importExportIntent.putExtra(SimplyConstants.KEY_KEYS_CONTACT, mKeys);
                 importExportIntent.putExtra(SimplyConstants.KEY_VALUES_CONTACT, mValues);
                 startActivity(importExportIntent);
+                break;
+            case R.id.action_deleteAll:
+                new AlertDialog.Builder(this)
+                        .setMessage("All contacts will be deleted.")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                phonebook.deleteAll(ContactsActivity.this);
+                                Toast.makeText(ContactsActivity.this, "All contacts deleted.", Toast.LENGTH_LONG).show();
+                                getContacts();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .show();
         }
 
         return super.onOptionsItemSelected(item);

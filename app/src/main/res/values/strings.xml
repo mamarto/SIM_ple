@@ -29,4 +29,5 @@
     <string name="contact_to_display_phone">Phone</string>
     <string name="contact_to_display_sim">SIM</string>
     <string name="contact_to_display_both">Both</string>
+    <string name="menu_deleteAll">Delete All</string>
 </resources>

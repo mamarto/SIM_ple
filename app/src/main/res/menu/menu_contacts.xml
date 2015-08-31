@@ -5,14 +5,16 @@
 
     <item android:id="@+id/action_show_contacts"
           android:title="@string/action_show_contacts"
-          android:orderInCategory="100"
+          android:orderInCategory="1"
           app:showAsAction="never"/>
 
     <item android:id="@+id/action_sort_by"
           android:title="@string/action_sort_by"
+          android:orderInCategory="2"
           app:showAsAction="never"/>
 
     <item android:id="@+id/action_import_export"
+          android:orderInCategory="3"
           android:title="@string/action_import_export"
           app:showAsAction="never"/>
 
@@ -22,4 +24,10 @@
           app:showAsAction="collapseActionView|ifRoom"
           app:actionViewClass="android.support.v7.widget.SearchView"
           android:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item android:id="@+id/action_deleteAll"
+          android:title="@string/menu_deleteAll"
+          android:orderInCategory="4"
+          app:showAsAction="never" />
+
 </menu>
