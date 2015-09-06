@@ -49,6 +49,8 @@ public class ImportExportContactActivity extends AppCompatActivity {
         mImportFromSim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Map<String, String> phoneNumbers = phonebook.getAllMobileNumbersByName(v.getContext());
+                mKeys = phoneNumbers.keySet().toArray(new String[phoneNumbers.size()]);
                 phonebook.importSimContact(mKeys, v.getContext());
             }
         });

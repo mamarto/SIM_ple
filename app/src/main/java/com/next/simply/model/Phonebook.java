@@ -39,6 +39,18 @@ public class Phonebook {
         return contacts;
     }
 
+    public ArrayList<String> getContactsName(final Context context) {
+        ArrayList<String> contacts = new ArrayList<String>();
+        final Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        while (cursor.moveToNext()) {
+            final int phone_id = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            final String contactName = cursor.getString(phone_id);
+
+            contacts.add(contactName);
+        }
+        return contacts;
+    }
+
     private String sortByLastName(String toSort) {
         String sorted = "";
         String[] split = toSort.split(" ");
@@ -214,7 +226,7 @@ public class Phonebook {
     public boolean areDifferent(String name, String[] contacts) {
 
         for (String firstName : contacts) {
-            if (name.equals(firstName)) {
+            if (name.equalsIgnoreCase(firstName)) {
                 return false;
             }
         }
@@ -233,7 +245,9 @@ public class Phonebook {
 
     public boolean insertSIMContact(String name, String number, Context context) {
         if (isSimAvailable(context)) {
-            if (name.length() < 16) {
+            if (name.length() > 16) {
+                name = name.substring(0, 16);
+            }
                 if (areDifferent(name, getSimNames(context))) {
                     Uri simUri = Uri.parse("content://icc/adn");
 
@@ -248,10 +262,6 @@ public class Phonebook {
                 else {
                     Toast.makeText(context, "Contact already exists in the SIM", Toast.LENGTH_SHORT).show();
                 }
-            }
-            else {
-                Toast.makeText(context, "Contact name must be less than 16 characters!", Toast.LENGTH_LONG).show();
-            }
         }
         else {
             Toast.makeText(context, R.string.sim_not_available, Toast.LENGTH_LONG).show();
@@ -260,6 +270,33 @@ public class Phonebook {
     }
 
     public boolean deleteContact(Context context, String name) {
+        try {
+            Uri simUri = Uri.parse("content://icc/adn/");
+            ContentResolver mContentResolver = context.getContentResolver();
+            Cursor cursor = mContentResolver.query(simUri, null, null, null, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    if (cursor.getString(cursor.getColumnIndex("name")).equalsIgnoreCase(name)) {
+                        mContentResolver.delete(
+                                simUri,
+                                "tag='" + cursor.getString(cursor.getColumnIndex("name")) +
+                                        "' AND " +
+                                        "number='" + cursor.getString(cursor.getColumnIndex("number")) + "'"
+                                , null);
+                        break;
+                    }
+                }
+                while (cursor.moveToNext());
+            }
+           cursor.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
         ContentResolver cr = context.getContentResolver();
         Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -276,6 +313,7 @@ public class Phonebook {
                 }
                 while (cursor.moveToNext());
             }
+            cursor.close();
         }
         catch (Exception e) {
             System.out.println(e.getStackTrace());

@@ -121,6 +121,7 @@ public class ContactsActivity extends AppCompatActivity {
                 }
 
                 intent.putExtra(SimplyConstants.KEY_CONTACT_NAME, item);
+                intent.putExtra(SimplyConstants.KEY_KEYS_CONTACT, mKeys);
                 startActivity(intent);
             }
         });

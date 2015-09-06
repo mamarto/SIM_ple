@@ -15,6 +15,8 @@ import com.next.simply.R;
 import com.next.simply.model.Phonebook;
 import com.next.simply.utils.SimplyConstants;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -23,6 +25,7 @@ public class EditContactActivity extends AppCompatActivity {
     @Bind(R.id.nameContactEditText) EditText mNameContact;
     @Bind(R.id.numberNameContactEditText) EditText mNumberContact;
 
+    private String[] mKeys;
     private String mName;
     private String mNumber;
     private Phonebook mPhonebook;
@@ -44,6 +47,7 @@ public class EditContactActivity extends AppCompatActivity {
             mActionBar.setTitle(Html.fromHtml("<b>" + mName + "</b>"));
             mNameContact.setText(mName);
             mNumberContact.setText(mNumber);
+            mKeys = extras.getStringArray(SimplyConstants.KEY_KEYS_CONTACT);
         }
         enableModify(false);
 
@@ -96,11 +100,35 @@ public class EditContactActivity extends AppCompatActivity {
                         }
                     })
                     .show();
+        }
+        else if (id == android.R.id.home) {
+            ArrayList<String> simContacts = mPhonebook.getSimNames(this);
+            ArrayList<String> phoneContacts = mPhonebook.getContactsName(this);
+            String name = mNameContact.getText().toString();
+            String number = mNumberContact.getText().toString();
 
+            for (String contactName : simContacts) {
+                if (contactName.equalsIgnoreCase(mName)) {
+                    if (name.length() > 15) {
+                        Toast.makeText(this, "Too much characters for SIM", Toast.LENGTH_SHORT).show();
+                        mPhonebook.insertSIMContact(mName, number, this);
+                    }
+                    else {
+                        mPhonebook.deleteContact(this, mName);
+                        mPhonebook.insertSIMContact(name, number, this);
+                    }
+                }
+            }
+
+            for (String contactName : phoneContacts) {
+                if (contactName.equalsIgnoreCase(mName)) {
+                    mPhonebook.deleteContact(this, mName);
+                    mPhonebook.createNewContact(name, number, this);
+                }
+            }
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
 
 
