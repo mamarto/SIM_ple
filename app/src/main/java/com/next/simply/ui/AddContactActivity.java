@@ -104,7 +104,7 @@ public class AddContactActivity extends AppCompatActivity {
     }
 
     private boolean addPhone(Phonebook phonebook) {
-        if (phonebook.createNewContact(mName, mKeys, mTelephone, mContext) && mKeys.length > 0) {
+        if (mName.length() > 0 && mTelephone.length() > 0 && mKeys.length > 0 && phonebook.createNewContact(mName, mKeys, mTelephone, mContext)) {
             Toast.makeText(mContext, "Contact added to the phone.", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -112,7 +112,7 @@ public class AddContactActivity extends AppCompatActivity {
     }
 
     private boolean addSim(Phonebook phonebook) {
-        if (phonebook.insertSIMContact(mName, mTelephone, mContext)) {
+        if (mName.length() > 0 && mTelephone.length() > 0 && phonebook.insertSIMContact(mName, mTelephone, mContext)) {
             Toast.makeText(mContext, "Contact added to the SIM.", Toast.LENGTH_SHORT).show();
             return true;
         }
