@@ -23,7 +23,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_line_gold"
+            android:src="@drawable/ic_line_white"
             android:layout_height="wrap_content"
             android:id="@+id/imageView2"/>
 
@@ -38,14 +38,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_line_gold"
+            android:src="@drawable/ic_line_white"
             android:id="@+id/imageView8"/>
     </RadioGroup>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView7"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

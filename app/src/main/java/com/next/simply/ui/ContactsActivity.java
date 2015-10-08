@@ -63,7 +63,7 @@ public class ContactsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         mActionBar = getSupportActionBar();
-        mActionBar.setTitle(Html.fromHtml("<b>SIM PLY</b>"));
+        mActionBar.setTitle(Html.fromHtml("<b>SIM PLE</b>"));
 
         phonebook = new Phonebook();
 

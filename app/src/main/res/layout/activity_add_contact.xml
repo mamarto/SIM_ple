@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:layout_below="@+id/nameEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -44,7 +44,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView3"
         android:layout_below="@+id/telephoneEditText"
         android:layout_alignParentLeft="true"

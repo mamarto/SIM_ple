@@ -1,19 +1,19 @@
 <resources>
-    <string name="app_name">Sim ply</string>
+    <string name="app_name">Sim ple</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_show_contacts">Contacts to display</string>
-    <string name="title_activity_contacts">SIM PLY</string>
+    <string name="title_activity_contacts">SIM PLE</string>
     <string name="no_contacts">There are no contacts to display.</string>
     <string name="action_search">Search</string>
     <string name="action_sort_by">Sort by</string>
     <string name="action_import_export">Import / Export</string>
-    <string name="title_activity_add_contact">SIM PLY</string>
+    <string name="title_activity_add_contact">SIM PLE</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_show_contacts">SIM PLY</string>
+    <string name="title_activity_show_contacts">SIM PLE</string>
     <string name="title_activity_sort_by">Sort by</string>
     <string name="title_activity_import_export_contact">Import / Export contacts</string>
-    <string name="title_activity_edit_contact">SIM PLY</string>
+    <string name="title_activity_edit_contact">SIM PLE</string>
     <string name="search_hint">Find Contact</string>
     <string name="add_contact_name">Name</string>
     <string name="add_contact_surname">Surname</string>
@@ -24,11 +24,12 @@
     <string name="action_delete">Delete</string>
     <string name="import_sim">Import from Sim</string>
     <string name="export_sim">Export to Sim</string>
-    <string name="title_activity_splash">SIM PLY</string>
+    <string name="title_activity_splash">SIM PLE</string>
     <string name="contact_empty">No contacts to display</string>
     <string name="contact_to_display_phone">Phone</string>
     <string name="contact_to_display_sim">SIM</string>
     <string name="contact_to_display_both">Both</string>
     <string name="menu_deleteAll">Delete All</string>
     <string name="sim_not_available">SIM not available.</string>
+    <string name="enable_changes">Tap the pencil to modify!</string>
 </resources>

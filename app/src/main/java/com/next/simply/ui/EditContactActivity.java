@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class EditContactActivity extends AppCompatActivity {
     private String mName;
     private String mNumber;
     private Phonebook mPhonebook;
+    private boolean modifyEnabled = false;
 
     private android.support.v7.app.ActionBar mActionBar;
 
@@ -49,7 +51,22 @@ public class EditContactActivity extends AppCompatActivity {
             mNumberContact.setText(mNumber);
             mKeys = extras.getStringArray(SimplyConstants.KEY_KEYS_CONTACT);
         }
-        enableModify(false);
+        enableModify(modifyEnabled);
+
+        if (!modifyEnabled) {
+            mNameContact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), R.string.enable_changes, Toast.LENGTH_SHORT).show();
+                }
+            });
+            mNumberContact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(EditContactActivity.this, R.string.enable_changes, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         mPhonebook = new Phonebook();
     }
@@ -80,7 +97,8 @@ public class EditContactActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            enableModify(true);
+            modifyEnabled = true;
+            enableModify(modifyEnabled);
             mNameContact.requestFocus();
         }
         else if (id == R.id.action_delete) {

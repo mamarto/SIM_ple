@@ -33,7 +33,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView9"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -42,7 +42,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView10"
         android:layout_below="@+id/importFromSim"
         android:layout_alignParentLeft="true"
@@ -51,7 +51,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView11"
         android:layout_below="@+id/exportToSim"
         android:layout_alignParentLeft="true"

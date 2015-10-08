@@ -32,7 +32,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:id="@+id/imageView12"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -40,7 +40,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:layout_height="wrap_content"
         android:id="@+id/imageView13"
         android:layout_below="@+id/nameContactEditText"
@@ -49,7 +49,7 @@
 
     <ImageView
         android:layout_width="wrap_content"
-        android:src="@drawable/ic_line_gold"
+        android:src="@drawable/ic_line_white"
         android:layout_height="wrap_content"
         android:id="@+id/imageView14"
         android:layout_below="@+id/numberNameContactEditText"
